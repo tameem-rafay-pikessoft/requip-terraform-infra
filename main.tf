@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 # Create the role for EC2 instance
-resource "aws_iam_role" "ec2_role" {
-  name = "ec2_role"
+resource "aws_iam_role" "EC2_Service_Role" {
+  name = "ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -22,14 +22,19 @@ resource "aws_iam_role" "ec2_role" {
 resource "aws_iam_role_policy_attachment" "ec2_role_permissions" {
   count = length(var.ec2_role_permissions)
   policy_arn = var.ec2_role_permissions[count.index]
-  role       = aws_iam_role.ec2_role.name
+  role       = aws_iam_role.EC2_Service_Role.name
+}
+
+resource "aws_iam_instance_profile" "EC2_instance_profile" {
+  name = aws_iam_role.EC2_Service_Role.name
+  role = aws_iam_role.EC2_Service_Role.id
 }
 
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-0a3c3a20c09d6f377"
   instance_type = "t2.micro"
   user_data     = file("${path.module}/EC2_user_data.sh")
-  iam_instance_profile = aws_iam_role.ec2_role.name
+  iam_instance_profile = aws_iam_instance_profile.EC2_instance_profile.name
 
   tags = {
     Name = "Example Instance"
@@ -71,6 +76,6 @@ resource "aws_ssm_parameter" "secure_parameter" {
   name        = var.parameter_store_name
   description = "My secure parameter"
   type        = "SecureString"
-  value       = ""
+  value       = "TEST VALUE AFTER DEPLOYMENT"
 
 }
