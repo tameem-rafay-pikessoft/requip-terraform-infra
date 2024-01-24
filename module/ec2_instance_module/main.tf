@@ -32,7 +32,8 @@ resource "aws_instance" "ec2_instance" {
   instance_type = var.instance_type
   user_data     = file("${path.module}/EC2_user_data.sh")
   iam_instance_profile = aws_iam_instance_profile.EC2_instance_profile.name
-
+  vpc_security_group_ids = [aws_security_group.example_security_group.id]
+  key_name        = var.ec2_key_name
   tags = {
     Name = "Example Instance"
   }

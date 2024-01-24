@@ -37,3 +37,7 @@ variable "ami" {
 variable "instance_type" {
   description = "Instance type for the EC2 instance"
 }
+
+variable "ec2_key_name" {
+  description = "Key name to connect with ssh keys"
+}
