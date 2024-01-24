@@ -5,11 +5,23 @@ set -e
 # Install the CodeDeploy agent
 yum update -y
 yum install -y ruby
-cd /home/ec2-user
-wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install
+wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
 chmod +x ./install
 ./install auto
 
-# Start the CodeDeploy agent
 service codedeploy-agent start
 chkconfig codedeploy-agent on
+
+#install the docker 
+yum install -y docker
+service docker start
+chkconfig docker on
+usermod -aG docker ec2-user
+
+#install docker compose
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# install caddy_data volume
+docker volume create caddy_data
+
