@@ -3,6 +3,19 @@ variable "aws_region" {
   description = "AWS region where resources will be provisioned"
   default     = "us-east-1" # Replace with your desired default region
 }
+
+# ----------------------------------------------------------------
+# ---------------------- AWS Resource Tags -----------------------
+# ----------------------------------------------------------------
+
+
+variable "ssh_allowed_ip" {
+  type    = string
+  default = "72.255.40.255/32"
+}
+
+
+
 # ----------------------------------------------------------------
 # ---------------------- AWS Resource Tags -----------------------
 # ----------------------------------------------------------------
@@ -56,6 +69,12 @@ variable "BranchName" {
   type        = string
   description = "Select branch from repository "
   default     = "main"
+}
+
+variable "s3BucketNameForArtifacts" {
+  type        = string
+  description = "S3 bucket to store the source code artifacts"
+  default     = "example-artifact-bucket-some-more-me-random-meeeee"
 }
 
 variable "CodeStarConnectionArn" {

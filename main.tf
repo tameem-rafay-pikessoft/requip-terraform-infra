@@ -3,11 +3,12 @@ provider "aws" {
 }
 
 module "ec2_instance_module" {
-  source        = "./module/ec2_instance_module"
-  ami           = "ami-0a3c3a20c09d6f377" # ami: aws linux machine
-  instance_type = "t2.micro"
-  instance_name = "production_instance"
-  tags          = var.common_tags
+  source         = "./module/ec2_instance_module"
+  ami            = "ami-0a3c3a20c09d6f377" # ami: aws linux machine
+  instance_type  = "t2.micro"
+  instance_name  = "production_instance"
+  ssh_allowed_ip = var.ssh_allowed_ip
+  tags           = var.common_tags
 }
 
 module "parameter_store_module" {
@@ -17,12 +18,13 @@ module "parameter_store_module" {
 }
 
 module "code_pipeline_module" {
-  source                = "./module/code_pipeline_module"
-  instance_name         = module.ec2_instance_module.instance_details.instance_name
-  tags                  = var.common_tags
-  FullRepositoryId      = var.FullRepositoryId
-  BranchName            = var.BranchName
-  CodeStarConnectionArn = var.CodeStarConnectionArn
+  source                   = "./module/code_pipeline_module"
+  instance_name            = module.ec2_instance_module.instance_details.instance_name
+  FullRepositoryId         = var.FullRepositoryId
+  BranchName               = var.BranchName
+  CodeStarConnectionArn    = var.CodeStarConnectionArn
+  s3BucketNameForArtifacts = var.s3BucketNameForArtifacts
+  tags                     = var.common_tags
 }
 
 

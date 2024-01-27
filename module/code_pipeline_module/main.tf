@@ -40,14 +40,14 @@ resource "aws_codedeploy_deployment_group" "codedeploy_group" {
 
   ec2_tag_filter {
     key   = "Name"
-    value = "example-tag"
+    value = var.instance_name
     type  = "KEY_AND_VALUE"
   }
 }
 
 # Create IAM role for AWS CodePipeline
 resource "aws_iam_role" "codepipeline_role" {
-  name = "example-codepipeline-role"
+  name = "codepipeline-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -126,12 +126,12 @@ resource "aws_iam_role_policy" "codepipeline_assume_role_policy" {
 
 # Attach AWS managed policy for CodePipeline to the IAM role
 resource "aws_iam_policy_attachment" "codepipeline_attachment" {
-  name       = "example-codepipeline-policy-attachment"
+  name       = "codepipeline-policy-attachment"
   roles      = [aws_iam_role.codepipeline_role.name]
   policy_arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
 }
 resource "aws_s3_bucket" "store_pipeline_artifacts_bucket" {
-  bucket        = "example-artifact-bucket-some-more-me-random-meeeee"
+  bucket        = var.s3BucketNameForArtifacts
   force_destroy = true # Delete the bucket even if the Bucket is not destroyed
 }
 

@@ -3,6 +3,16 @@ variable "tags" {
   default = {}
 }
 
+variable "instance_name" {
+  type        = string
+  description = "Instance name that is included in deployment group"
+}
+
+variable "s3BucketNameForArtifacts" {
+  type        = string
+  description = "S3 bucket to store the source code artifacts"
+}
+
 variable "FullRepositoryId" {
   type        = string
   description = "Repository used in code pipeline"
