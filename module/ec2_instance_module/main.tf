@@ -1,3 +1,16 @@
+resource "tls_private_key" "example" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name   = "ec2-instance-key"
+  public_key = tls_private_key.example.public_key_openssh
+  provisioner "local-exec" { # Create "myKey.pem" to your computer!!
+    command = "echo '${tls_private_key.example.private_key_pem}' > ../private-key.pem"
+  }
+  tags = var.common_tags
+}
 
 # Create the role for EC2 instance
 resource "aws_iam_role" "EC2_Service_Role" {
@@ -35,8 +48,8 @@ resource "aws_instance" "ec2_instance" {
   instance_type = var.instance_type
   user_data     = file("${path.module}/EC2_user_data.sh")
   iam_instance_profile = aws_iam_instance_profile.EC2_instance_profile.name
-  vpc_security_group_ids = [aws_security_group.example_security_group.id]
-  key_name        = var.ec2_key_name
+  vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
+  key_name      = aws_key_pair.ec2_key_pair.key_name #
   tags = var.tags
 }
 # -- Assign Elastic IP to EC2 
@@ -47,9 +60,9 @@ resource "aws_eip" "aws_instance_elastic_ip" {
 }
 
 #EC2 security group
-resource "aws_security_group" "example_security_group" {
-  name        = "example-security-group"
-  description = "Example security group"
+resource "aws_security_group" "ec2_security_group" {
+  name        = "ec2-security-group"
+  description = "Security group attached with EC2"
 
   ingress {
     from_port   = 22
