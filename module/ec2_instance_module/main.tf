@@ -1,15 +1,15 @@
-resource "tls_private_key" "example" {
+resource "tls_private_key" "key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 resource "aws_key_pair" "ec2_key_pair" {
   key_name   = "ec2-instance-key"
-  public_key = tls_private_key.example.public_key_openssh
+  public_key = tls_private_key.key.public_key_openssh
   provisioner "local-exec" { # Create "myKey.pem" to your computer!!
-    command = "echo '${tls_private_key.example.private_key_pem}' > ../private-key.pem"
+    command = "echo '${tls_private_key.key.private_key_pem}' > ../private-key.pem"
   }
-  tags = var.common_tags
+  tags = var.tags
 }
 
 # Create the role for EC2 instance
@@ -34,7 +34,6 @@ resource "aws_iam_role_policy_attachment" "ec2_role_permissions" {
   count      = length(var.ec2_role_permissions)
   policy_arn = var.ec2_role_permissions[count.index]
   role       = aws_iam_role.EC2_Service_Role.name
-  tags       = var.tags
 }
 
 resource "aws_iam_instance_profile" "EC2_instance_profile" {

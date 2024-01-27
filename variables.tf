@@ -20,15 +20,7 @@ variable "ssh_allowed_ip" {
 # ---------------------- AWS Resource Tags -----------------------
 # ----------------------------------------------------------------
 
-variable "common_tags" {
-  type = map(string)
-  default = {
-    Project_Name = var.project_name
-    Environment  = var.environment
-    Account_ID   = var.account_id
-    Region       = var.aws_region
-  }
-}
+
 
 variable "project_name" {
   type    = string

@@ -4,5 +4,5 @@ resource "aws_ssm_parameter" "secure_parameter" {
   description = "My secure parameter"
   type        = "SecureString"
   value       = "TEST VALUE AFTER DEPLOYMENT"
-  tag         = var.tags
+  tags        = var.tags
 }

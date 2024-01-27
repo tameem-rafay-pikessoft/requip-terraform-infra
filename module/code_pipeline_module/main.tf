@@ -161,7 +161,7 @@ resource "aws_codepipeline" "example_pipeline" {
       configuration = {
         BranchName           = var.BranchName
         FullRepositoryId     = var.FullRepositoryId
-        ConnectionArn        = var.ConnectionArn
+        ConnectionArn        = var.CodeStarConnectionArn
         OutputArtifactFormat = "CODE_ZIP"
       }
     }
