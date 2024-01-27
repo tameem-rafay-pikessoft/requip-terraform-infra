@@ -2,8 +2,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-
-
 module "ec2_instance_module" {
   source        = "./module/ec2_instance_module"
   ami           = "ami-0a3c3a20c09d6f377" # ami: aws linux machine
@@ -31,8 +29,8 @@ module "parameter_store_module" {
 # ----------------------------------------------------------------
 
 
-output "module_instance_id" {
-  value = module.ec2_instance_module.instance_id
+output "module_ec2_instance_details" {
+  value = module.ec2_instance_module.instance_details
 }
 
 output "private_key" {
