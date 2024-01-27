@@ -44,11 +44,12 @@ module "code_pipeline_module" {
 # ----------------------------------------------------------------
 
 
+output "parameter_store_name" {
+  value = module.parameter_store_module.parameter_store_name
+}
 output "module_ec2_instance_details" {
   value = module.ec2_instance_module.instance_details
 }
-
-# output "private_key" {
-#   value     = tls_private_key.example.private_key_pem
-#   sensitive = true
-# }
+output "ec2_instance_ssh_details" {
+  value = "ssh -i \"private-key.pem\" ec2-user@${module.ec2_instance_module.elastic_ip}.compute-1.amazonaws.com"
+}
