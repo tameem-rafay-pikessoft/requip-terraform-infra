@@ -3,7 +3,7 @@
 set -e
 
 # Install the CodeDeploy agent
-yum update -y
+sudo yum update -y
 yum install -y ruby
 wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
 chmod +x ./install

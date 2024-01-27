@@ -13,6 +13,7 @@ resource "aws_iam_role" "EC2_Service_Role" {
       },
     }],
   })
+  tags = var.tags
 }
 
 # Attach different policies with EC2 role
@@ -20,11 +21,13 @@ resource "aws_iam_role_policy_attachment" "ec2_role_permissions" {
   count = length(var.ec2_role_permissions)
   policy_arn = var.ec2_role_permissions[count.index]
   role       = aws_iam_role.EC2_Service_Role.name
+  tags = var.tags
 }
 
 resource "aws_iam_instance_profile" "EC2_instance_profile" {
   name = aws_iam_role.EC2_Service_Role.name
   role = aws_iam_role.EC2_Service_Role.id
+  tags = var.tags
 }
 
 resource "aws_instance" "ec2_instance" {
@@ -34,14 +37,13 @@ resource "aws_instance" "ec2_instance" {
   iam_instance_profile = aws_iam_instance_profile.EC2_instance_profile.name
   vpc_security_group_ids = [aws_security_group.example_security_group.id]
   key_name        = var.ec2_key_name
-  tags = {
-    Name = "Example Instance"
-  }
+  tags = var.tags
 }
 # -- Assign Elastic IP to EC2 
 resource "aws_eip" "aws_instance_elastic_ip" {
   domain      = "vpc"
   instance = aws_instance.ec2_instance.id
+  tags = var.tags
 }
 
 #EC2 security group
@@ -65,5 +67,6 @@ resource "aws_security_group" "example_security_group" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
+  tags = var.tags
 }
 

@@ -41,3 +41,8 @@ variable "instance_type" {
 variable "ec2_key_name" {
   description = "Key name to connect with ssh keys"
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}
