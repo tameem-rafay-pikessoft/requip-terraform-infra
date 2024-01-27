@@ -10,17 +10,21 @@ module "ec2_instance_module" {
   tags          = var.common_tags
 }
 
-module "code_pipeline_module" {
-  source = "./module/code_pipeline_module"
-  tags   = var.common_tags
-  instance_name  = module.ec2_instance_module.instance_details.instance_name
-}
-
 module "parameter_store_module" {
   source               = "./module/parameter_store_module"
   parameter_store_name = var.parameter_store_name
-  tags   = var.common_tags
+  tags                 = var.common_tags
 }
+
+module "code_pipeline_module" {
+  source                = "./module/code_pipeline_module"
+  instance_name         = module.ec2_instance_module.instance_details.instance_name
+  tags                  = var.common_tags
+  FullRepositoryId      = var.FullRepositoryId
+  BranchName            = var.BranchName
+  CodeStarConnectionArn = var.CodeStarConnectionArn
+}
+
 
 
 
@@ -33,7 +37,7 @@ output "module_ec2_instance_details" {
   value = module.ec2_instance_module.instance_details
 }
 
-output "private_key" {
-  value     = tls_private_key.example.private_key_pem
-  sensitive = true
-}
+# output "private_key" {
+#   value     = tls_private_key.example.private_key_pem
+#   sensitive = true
+# }

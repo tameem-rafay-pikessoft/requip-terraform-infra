@@ -21,7 +21,7 @@ variable "ec2_role_permissions" {
 variable "ssh_allowed_ip" {
   type        = string
   description = "IP address allowed for SSH (e.g., '1.2.3.4/32')"
-  default = "72.255.40.255/32"
+  default     = "72.255.40.255/32"
 }
 
 variable "security_group_allowed_ports" {

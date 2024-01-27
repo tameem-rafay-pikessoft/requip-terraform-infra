@@ -41,3 +41,25 @@ variable "parameter_store_name" {
   description = "Name of the AWS SSM Parameter Store"
   default     = "/requip/be"
 }
+
+# ----------------------------------------------------------------
+# --------------- AWS CodePipeline VARIABLES ---------------------
+# ----------------------------------------------------------------
+
+variable "FullRepositoryId" {
+  type        = string
+  description = "Repository used in code pipeline"
+  default     = "rafay-tariq/EarthAdventureBackend"
+}
+
+variable "BranchName" {
+  type        = string
+  description = "Select branch from repository "
+  default     = "main"
+}
+
+variable "CodeStarConnectionArn" {
+  type        = string
+  description = "Existing connection of github/bitbucket with AWS Coestart"
+  default     = "arn:aws:codestar-connections:us-east-1:553763657971:connection/99b46435-d2be-482b-b00c-c449716f1cde"
+}
