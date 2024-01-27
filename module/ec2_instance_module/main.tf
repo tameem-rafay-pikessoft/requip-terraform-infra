@@ -4,10 +4,10 @@ resource "tls_private_key" "key" {
 }
 
 resource "aws_key_pair" "ec2_key_pair" {
-  key_name   = "ec2-instance-key"
+  key_name   = "private-key"
   public_key = tls_private_key.key.public_key_openssh
   provisioner "local-exec" { # Create "myKey.pem" to your computer!!
-    command = "echo '${tls_private_key.key.private_key_pem}' > ../private-key.pem"
+    command = "echo '${tls_private_key.key.private_key_pem}' > ./private-key.pem"
   }
   tags = var.tags
 }
