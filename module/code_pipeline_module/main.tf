@@ -1,6 +1,6 @@
 # Create CodeDeploy Application
-resource "aws_codedeploy_app" "example_app" {
-  name     = "example-application"
+resource "aws_codedeploy_app" "code_pipeline_app" {
+  name     = "codePipeline-application"
   compute_platform = "Server"  # For EC2 instances
 }
 
@@ -32,16 +32,11 @@ resource "aws_iam_policy_attachment" "codedeploy_policy_attachment" {
 
 
 # Create CodeDeploy Deployment Group
-resource "aws_codedeploy_deployment_group" "example_group" {
-  app_name              = aws_codedeploy_app.example_app.name
-  deployment_group_name = "example-deployment-group"
-  deployment_config_name = "CodeDeployDefault.OneAtATime"  # In-place deployment strategy
+resource "aws_codedeploy_deployment_group" "codedeploy_group" {
+  app_name              = aws_codedeploy_app.code_pipeline_app.name
+  deployment_group_name = "codedeploy-deployment-group"
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"  # All at once not In place
   service_role_arn      = aws_iam_role.codedeploy_role.arn  # Use the newly created IAM role
-
-  auto_rollback_configuration {
-    enabled = true
-    events  = ["DEPLOYMENT_FAILURE"]
-  }
 
   ec2_tag_filter {
     key   = "Name"
@@ -184,8 +179,8 @@ resource "aws_codepipeline" "example_pipeline" {
       version         = "1"
       input_artifacts = ["SourceArtifact"]
       configuration = {
-        ApplicationName          = aws_codedeploy_app.example_app.name
-        DeploymentGroupName     = aws_codedeploy_deployment_group.example_group.deployment_group_name
+        ApplicationName          = aws_codedeploy_app.code_pipeline_app.name
+        DeploymentGroupName     = aws_codedeploy_deployment_group.codedeploy_group.deployment_group_name
       }
     }
   }

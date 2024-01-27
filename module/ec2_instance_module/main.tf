@@ -50,7 +50,9 @@ resource "aws_instance" "ec2_instance" {
   iam_instance_profile = aws_iam_instance_profile.EC2_instance_profile.name
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
   key_name      = aws_key_pair.ec2_key_pair.key_name #
-  tags = var.tags
+  tags = merge(var.tags, {
+    Name = var.instance_name
+  })
 }
 # -- Assign Elastic IP to EC2 
 resource "aws_eip" "aws_instance_elastic_ip" {

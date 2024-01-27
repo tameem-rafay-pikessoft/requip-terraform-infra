@@ -8,12 +8,14 @@ module "ec2_instance_module" {
   source        = "./module/ec2_instance_module"
   ami           = "ami-0a3c3a20c09d6f377" # ami: aws linux machine
   instance_type = "t2.micro"
+  instance_name = "production_instance"
   tags          = var.common_tags
 }
 
 module "code_pipeline_module" {
   source = "./module/code_pipeline_module"
   tags   = var.common_tags
+  instance_name  = module.ec2_instance_module.instance_details.instance_name
 }
 
 module "parameter_store_module" {

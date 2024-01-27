@@ -30,6 +30,10 @@ variable "security_group_allowed_ports" {
   default     = [80, 443]
 }
 
+variable "instance_name" {
+  description = "Name of the instance so that we can use this instance in deployment group in code pipeline"
+}
+
 variable "ami" {
   description = "AMI ID for the EC2 instance"
 }
